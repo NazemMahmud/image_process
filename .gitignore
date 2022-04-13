@@ -6,3 +6,6 @@
 
 # Local files
 files/
+
+# cache files
+__pycache__
