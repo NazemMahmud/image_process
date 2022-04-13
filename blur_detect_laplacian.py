@@ -1,22 +1,17 @@
+# - blur detect - show me the blurred image names and normal image names
+# - normal image file names
+# - Advanced, removing blurry to normal
 import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import os
-# from read_and_plot_from_dir import read_and_plot_images
-from blur_detect_laplacian import calculate_laplacian_var
 
 load_dotenv()
-
 focal_measures = []
-separator = os.getenv('DIRECTORY_SEPARATOR')
-directory = os.getenv('FOLDER_PATH')
-print(os.path.sep)
-print(directory)
-print(os.sep)
 
 
-def read_image_files(directory):
+def read_images(directory):
     for filename in os.listdir(directory):
         image_path = os.path.join(directory, filename)
         if os.path.isfile(os.path.join(directory, filename)):
@@ -28,6 +23,11 @@ def read_image_files(directory):
                 fileObj.write(f'{filename}: {focal_measurement} \n')
 
 
-# read_and_plot_images(directory)
-read_image_files(directory)
-
+def calculate_laplacian_var(image_path):
+    """
+        * convert RGB image to Gray scale image
+        * Measure focal measure score (laplacian approach)
+    """
+    gray_image = cv.cvtColor(image_path, cv.COLOR_BGR2GRAY)
+    fvar = cv.Laplacian(gray_image, cv.CV_64F).var()
+    return fvar
